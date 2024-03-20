@@ -25,6 +25,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "fonts": {
+      "Gotham": "./assets/fonts/Gotham_Regular/Gotham_Regular.otf"
     }
   }
 }
