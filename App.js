@@ -1,37 +1,61 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { getDatabase, ref, onValue } from "firebase/database";
-import { initializeApp } from "firebase/app";
-import { useState } from "react";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { User, onAuthStateChanged } from 'firebase/auth'
+import {useState, useEffect} from 'react'
+import LoginScreen from './screens/LoginScreen/Login';
+import SignUpScreen from './screens/SignUpScreen/SignUpScreen';
+import HomeScreen from './screens/HomeScreen/HomeScreen'
+import { FIREBASE_AUTH } from './FirebaseConfig';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAw8LPgiPTn26s0yaNEsKU7E8BPDj_TVsQ",
-  authDomain: "khiron-7cf85.firebaseapp.com",
-  databaseURL: "https://khiron-7cf85-default-rtdb.firebaseio.com",
-  projectId: "khiron-7cf85",
-  storageBucket: "khiron-7cf85.appspot.com",
-  messagingSenderId: "353230209186",
-  appId: "1:353230209186:web:321a08ab67d20ccf5ed7fb",
-  measurementId: "G-E1XB07824Q"
-};
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const Stack = createNativeStackNavigator();
 
-// Initialize Realtime Database and get a reference to the service
-const db = getDatabase(app);
+const InsideStack = createNativeStackNavigator();
 
+const LogInStack = createNativeStackNavigator();
+
+function InsideLayout(){
+  return (
+    <InsideStack.Navigator>
+      <InsideStack.Screen name = "Home Screen" component = {HomeScreen} options={{headerShown: false}}/>
+    </InsideStack.Navigator>
+  )
+}
+
+function LoginLayout(){
+  return (
+    <LogInStack.Navigator>
+      <LogInStack.Screen name = "Log In Screen" component = {LoginScreen} options={{headerShown: false}}/>
+      <LogInStack.Screen name = "Sign Up Screen" component = {SignUpScreen} options={{headerShown: false}}/>
+    </LogInStack.Navigator>
+  )
+}
 
 export default function App() {
-  
+  const [user, setUser] = useState(null);
+ // const [user, setUser] = useState<User>({});
+
+
+  useEffect (() => {
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      setUser(user);
+    });
+  }, []);
 
   return (
     
-    <View style={styles.container}>
-      <Text>{User.Name}</Text>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName = 'Login'>
+        {user ? (
+          <Stack.Screen name='Inside' component={InsideLayout} options={{headerShown: false}}/>
+        ) : (
+          <Stack.Screen name='Login' component={LoginLayout} options={{headerShown: false}}/>
+        )}
+        
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
