@@ -3,24 +3,11 @@ import { Image, StatusBar } from "react-native";
 
 export default function LoadingScreen(){
     const logo = require('../../assets/Logo-21.png');
-    const style = {
-        color: '#fff',
-        fontSize: 64, 
-        fontWeight: 'bold',
-    };
-
-    const style2 = {
-        fontSize: 24, 
-        marginTop: 200,
-        marginBottom: -70,
-        color: '#fff',
-    }
-
     return(
         <View style={styles.container}>
-            <Text style={style}>SOLO</Text>
+            <Text style={styles.mainTitle}>SOLO</Text>
             <StatusBar style="auto" />
-            <Text style={style2}>Powered By</Text>
+            <Text style={styles.PoweredBy}>Powered By</Text>
             <Image source={logo} style={{ width: 300, height: 200 }}  />
         </View>
     );
@@ -35,4 +22,16 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    mainTitle: {
+        marginTop: 225,
+        color: '#fff',
+        fontSize: 64, 
+        fontWeight: 'bold',
+    },
+    PoweredBy: {
+        fontSize: 24, 
+        marginTop: 200,
+        marginBottom: -70,
+        color: '#fff',
+    }
   });

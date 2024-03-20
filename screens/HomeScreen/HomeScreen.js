@@ -4,12 +4,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 export default function MyPage() {
   return (
     <View style={styles.container}>
-      {/* Section 1 */}
       <View style={[styles.section, styles.section1]}>
         <Text style={styles.soloText}>SOLO</Text>
       </View>
-
-      {/* Section 2 */}
       <View style={[styles.section, styles.section2]}>
         <View style={styles.timerBox}>
           <Text style={styles.timerText}>00:00</Text>
@@ -18,8 +15,6 @@ export default function MyPage() {
           <Text style={[styles.buttonText, styles.startButtonText]}>Start Activity</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Section 3 */}
       <View style={[styles.section, styles.section3]}>
         <TouchableOpacity style={styles.navButton}>
           <Text style={styles.buttonText}>Home</Text>
