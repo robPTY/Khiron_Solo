@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { User, onAuthStateChanged } from 'firebase/auth'
@@ -56,6 +57,7 @@ export default function App() {
         
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
 
