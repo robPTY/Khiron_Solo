@@ -1,14 +1,17 @@
 import { View, Text, StyleSheet, Button } from "react-native";
 import { Image, StatusBar } from "react-native";
+import { useFonts } from 'expo-font';
 
 export default function LoadingScreen(){
-    const logo = require('../../assets/Logo-21.png');
+    const logo = require('../../assets/Logo-03.png');
+    //const GothamFont = require('../../assets/fonts/Gotham_Regular/Gotham_Regular.otf')
+    //const [fontsLoaded] = useFonts(GothamFont)
     return(
         <View style={styles.container}>
             <Text style={styles.mainTitle}>SOLO</Text>
             <StatusBar style="auto" />
             <Text style={styles.PoweredBy}>Powered By</Text>
-            <Image source={logo} style={{ width: 300, height: 200 }}  />
+            <Image source={logo} style={styles.KhironLogo}  />
         </View>
     );
 }
@@ -27,11 +30,18 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 64, 
         fontWeight: 'bold',
+        //fontFamily: 'Gotham'
     },
     PoweredBy: {
         fontSize: 24, 
         marginTop: 200,
-        marginBottom: -70,
+        marginBottom: -180,
         color: '#fff',
+        //fontFamily: 'Gotham'
+    },
+    KhironLogo:{
+        width: 200,
+        height: 100,
+        marginTop: 150
     }
   });
