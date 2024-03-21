@@ -2,8 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'; // Import the hook
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 export default function MyPage() {
+  const navigation = useNavigation(); // Get the navigation object
+
   return (
     <View style={styles.container}>
       <View style={[styles.section, styles.section1]}>
@@ -27,7 +33,8 @@ export default function MyPage() {
           <TouchableOpacity style={styles.navButton}>
             <Feather name="activity" size={40} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.navButton}>
+          {/* Corrected onPress handler */}
+          <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('ProfileScreen')}>
             <AntDesign name="user" size={40} color="white" />
           </TouchableOpacity>
         </View>

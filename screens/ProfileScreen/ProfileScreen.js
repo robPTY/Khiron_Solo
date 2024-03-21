@@ -4,78 +4,66 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Profile</Text>
-
-      <View style={styles.avatar}>
-        <Text style={styles.avatarText}>Avatar</Text>
+        <View style={styles.profileContainer}>
+          <Image
+            style={styles.profileImage}
+          />
+          <Text style={styles.profileName}>Your Name</Text>
+        </View>
+        <View style={styles.emergencyContainer}>
+          <Text style={styles.emergencyTitle}>Emergency Contacts</Text>
+          {emergencyContacts.map((contact, index) => (
+            <TouchableOpacity key={index} style={styles.contactContainer}>
+              <Text style={styles.contactName}>{contact.name}</Text>
+              <Text style={styles.contactNumber}>{contact.phoneNumber}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
-
-      <Text style={styles.userName}>Username</Text>
-      <Text style={styles.email}>email@example.com</Text>
-
-      <View style={styles.navbar}>
-        <TouchableOpacity style={styles.navButton}>
-          <Text style={styles.buttonText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <Text style={styles.buttonText}>Activity</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <Text style={styles.buttonText}>Profile</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 20,
-    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 20,
   },
-  header: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  avatar: {
-    width: 150,
-    height: 150,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 15,
-    justifyContent: 'center',
+  profileContainer: {
     alignItems: 'center',
     marginBottom: 20,
   },
-  avatarText: {
-    fontSize: 24,
+  profileImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginBottom: 10,
+  },
+  profileName: {
+    fontSize: 20,
     fontWeight: 'bold',
   },
-  userName: {
-    fontSize: 24,
+  emergencyContainer: {
+    borderTopWidth: 1,
+    borderTopColor: '#CCCCCC',
+    paddingTop: 20,
+  },
+  emergencyTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  email: {
-    fontSize: 18,
-    marginBottom: 20,
+  contactContainer: {
+    backgroundColor: '#EFEFEF',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
   },
-  navbar: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  navButton: {
-    backgroundColor: '#0ABC71',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginHorizontal: 5,
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontSize: 18,
+  contactName: {
+    fontSize: 16,
     fontWeight: 'bold',
+  },
+  contactNumber: {
+    fontSize: 14,
   },
 });
