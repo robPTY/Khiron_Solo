@@ -2,37 +2,42 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function MyPage() {
-  return (
-    <View style={styles.container}>
-      <View style={[styles.section, styles.section1]}>
-        <Text style={styles.soloText}>SOLO</Text> 
-      </View>
-      <View style={[styles.section, styles.section2]}>
-        <View style={styles.timerBox}>
-          <Text style={styles.timerText}>00:00</Text>
+const Stack = createNativeStackNavigator();
+
+export default function HomePage({navigation}) {
+    return (
+      <View style={styles.container}>
+          <View style={[styles.section, styles.section1]}>
+            <Text style={styles.soloText}>SOLO</Text> 
+          </View>
+          <View style={[styles.section, styles.section2]}>
+            <View style={styles.timerBox}>
+              <Text style={styles.timerText}>00:00</Text>
+            </View>
+            <TouchableOpacity style={styles.startButton}>
+              <Text style={[styles.buttonText, styles.startButtonText]}>Start Activity</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.section, styles.section3]}>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.navButton}>
+                <Text style={styles.buttonText}>
+                  <Feather name="home" size={40} color="white" />
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.navButton}>
+                <Feather name="activity" size={40} color="white" />
+              </TouchableOpacity>
+              {/* Corrected onPress handler */}
+              <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('ProfileScreen')}>
+                <AntDesign name="user" size={40} color="white" />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-        <TouchableOpacity style={styles.startButton}>
-          <Text style={[styles.buttonText, styles.startButtonText]}>Start Activity</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={[styles.section, styles.section3]}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.navButton}>
-            <Text style={styles.buttonText}>
-              <Feather name="home" size={40} color="white" />
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.navButton}>
-            <Feather name="activity" size={40} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.navButton}>
-            <AntDesign name="user" size={40} color="white" />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
   );
 }
 
