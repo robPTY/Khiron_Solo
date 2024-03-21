@@ -1,16 +1,15 @@
 import { View, Text, StyleSheet, TextInput, Button, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
+import { FIREBASE_APP } from '../../FirebaseConfig';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
+import { getDatabase } from 'firebase/database';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //import SignUp from '../SignUpScreen/SignUpScreen';
 //import { useNavigation } from 'expo-router';
 
-const Stack = createNativeStackNavigator();
 
-const SignUpStack = createNativeStackNavigator();
-
-
+const database = getDatabase(FIREBASE_APP);
 
 const Login = ({ navigation }) => {
     //const navigation = useNavigation();
@@ -24,6 +23,7 @@ const Login = ({ navigation }) => {
         setLoading(true);
         try{
             const response = await signInWithEmailAndPassword(auth, email, password);
+            console.log('login');
         } catch (error){
             console.log(error);
             alert('Sign in  failed: ' + error.message);
