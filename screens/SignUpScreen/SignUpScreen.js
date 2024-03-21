@@ -2,25 +2,37 @@ import { View, Text, StyleSheet, TextInput, Button, ActivityIndicator } from 're
 import React, { useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
+import { FIREBASE_APP } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getDatabase, ref, set, push } from "firebase/database";
 //import Login from '../LoginScreen/Login';
 
+const db = getDatabase(FIREBASE_APP);
 
 const Stack = createNativeStackNavigator();
 
 const SignUpScreen = ({ navigation }) => {
     //const navigation = useNavigation();
+    const [userId, setUserId] = useState('');
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState('');
     const auth = FIREBASE_AUTH
 
-    
+    const userData = {
+        Email: email,
+        Name: name
+    }
 
     const signUp = async () =>{
         setLoading(true);
+        const usersRef = ref(db, 'Users');
         try{
             const response = await createUserWithEmailAndPassword(auth, email, password);
+            const newUserRef = push(usersRef);
+            await set(newUserRef, userData);
+            setUserId(newUserRef.key);
         } catch (error){
             console.log(error);
             alert('Sign in  failed: ' + error.message);
@@ -32,6 +44,7 @@ const SignUpScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <TextInput value={name} style = {styles.input} placeholder='Name' autoCapitalize='none' onChangeText={(text) => setName(text)}></TextInput>
             <TextInput value={email} style = {styles.input} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}></TextInput>
             <TextInput secureTextEntry={true} value={password} style = {styles.input} placeholder='Password' autoCapitalize='none' onChangeText={(text) => setPassword(text)}></TextInput>
             
