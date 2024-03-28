@@ -28,10 +28,10 @@ export default function ProfileScreen({navigation}) {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.navButton}>
-          <Feather name="home" size={40} color="white" />
+          <Feather name="activity" size={40} color="white" onPress={() => navigation.navigate('ActivityLogScreen')}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton}>
-          <Feather name="activity" size={40} color="white" onPress={() => navigation.navigate('Inside')} />
+          <Feather name="home" size={40} color="white" onPress={() => navigation.navigate('Inside')} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('ProfileScreen')}>
           <AntDesign name="user" size={40} color="white" />
@@ -44,7 +44,7 @@ export default function ProfileScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F2F2F2',
     padding: 20,
   },
   profileContainer: {
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   contactContainer: {
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#FFFFFF',
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
