@@ -8,7 +8,8 @@ import {useState, useEffect} from 'react'
 import ProfileScreen from './screens/ProfileScreen/ProfileScreen';
 import LoginScreen from './screens/LoginScreen/Login';
 import SignUpScreen from './screens/SignUpScreen/SignUpScreen';
-import HomeScreen from './screens/HomeScreen/HomeScreen'
+import HomeScreen from './screens/HomeScreen/HomeScreen';
+import ActivityLogScreen from './screens/ActivityLogScreen/ActivityLogScreen';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 
 
@@ -56,6 +57,7 @@ export default function App() {
           <Stack.Screen name='Login' component={LoginLayout} options={{headerShown: false}}/>
         )}
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="ActivityLogScreen" component={ActivityLogScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
       </Stack.Navigator>
     </NavigationContainer>
 

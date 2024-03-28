@@ -26,6 +26,13 @@ export default function HomePage({navigation}) {
     setTimerRunning(false);
   };
 
+  const saveTimer = () => {
+    // Here you can implement the logic to save timer information
+    // For example, you can save it to AsyncStorage or send it to a server
+    // This is just a placeholder function
+    console.log("Timer information saved:", timer);
+  };
+
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
@@ -52,17 +59,20 @@ export default function HomePage({navigation}) {
           <TouchableOpacity style={[styles.button, styles.resetButton]} onPress={resetTimer}>
             <Text style={styles.buttonText}>Reset Timer</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={saveTimer}>
+            <Text style={styles.buttonText}>Save Activity</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={[styles.section, styles.section3]}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.navButton}>
+          <TouchableOpacity style={styles.navButton}  onPress={() => navigation.navigate('ActivityLogScreen')}>
             <Text style={styles.buttonText}>
-              <Feather name="home" size={40} color="white" />
+              <Feather name="activity" size={40} color="white" />
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Inside')}>
-            <Feather name="activity" size={40} color="white" />
+            <Feather name="home" size={40} color="white" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('ProfileScreen')}>
             <AntDesign name="user" size={40} color="white" />
@@ -130,7 +140,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   resetButton: {
-    backgroundColor: '#0ABC71',
+    backgroundColor: '#606A69',
+    marginTop: 10,
+  },
+  saveButton: {
+    backgroundColor: '#4287f5', // Change color according to your design
     marginTop: 10,
   },
   buttonText: {
