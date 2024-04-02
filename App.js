@@ -10,6 +10,7 @@ import LoginScreen from './screens/LoginScreen/Login';
 import SignUpScreen from './screens/SignUpScreen/SignUpScreen';
 import HomeScreen from './screens/HomeScreen/HomeScreen';
 import ActivityLogScreen from './screens/ActivityLogScreen/ActivityLogScreen';
+import LoadingScreen from './screens/LoadingScreen/LoadingScreen';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 
 
@@ -38,14 +39,23 @@ function LoginLayout(){
 
 export default function App() {
   const [user, setUser] = useState(null);
- // const [user, setUser] = useState<User>({});
-
+  const [loading, setLoading] = useState(false);
+  const [loadingScreen, setLoadingScreen] = useState(false);
 
   useEffect (() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
+      setLoadingScreen(true);
     });
+    return unsubscribe;
   }, []);
+
+  if (loadingScreen) {
+    setTimeout(() => {
+      setLoadingScreen(false);
+    }, 3000);
+    return <LoadingScreen />;
+  }
 
   return (
     

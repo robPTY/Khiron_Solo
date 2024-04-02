@@ -1,21 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import ProfileImage from '../../assets/pfp.jpg';
 
 export default function ProfileScreen({navigation}) {
   const emergencyContacts = [
     { name: 'John Doe', phoneNumber: '123-456-7890' },
     { name: 'Jane Smith', phoneNumber: '987-654-3210' },
   ];
+  
 
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
         <Image
           style={styles.profileImage}
+          source={ProfileImage}
         />
-        <Text style={styles.profileName}>Your Name</Text>
+        <Text style={styles.profileName}>Anna Campbell</Text>
       </View>
       <View style={styles.emergencyContainer}>
         <Text style={styles.emergencyTitle}>Emergency Contacts</Text>
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 75,
     marginBottom: 10,
+    marginTop: 50
   },
   profileName: {
     fontSize: 20,
