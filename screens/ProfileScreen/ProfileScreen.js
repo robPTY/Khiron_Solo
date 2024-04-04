@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, Button} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -14,6 +14,9 @@ export default function ProfileScreen({navigation, userData}) {
     return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
   };
   const [profilePic, setProfilePic] = useState(ProfileImage);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newContactName, setNewContactName] = useState('');
+  const [newContactNumber, setNewContactNumber] = useState('');
 
   const selectImage = () => {
     const options = {
@@ -40,6 +43,14 @@ export default function ProfileScreen({navigation, userData}) {
         setProfilePic(source);
       }
     });
+  };
+
+  const saveNewContact = () => {
+    // Save new contact logic
+    setModalVisible(false);
+    // Clear input fields
+    setNewContactName('');
+    setNewContactNumber('');
   };
 
   return (
@@ -70,6 +81,42 @@ export default function ProfileScreen({navigation, userData}) {
             <Text style={styles.contactNumber}>{formatPhoneNumber(userData.Contacts[contactId].Number)}</Text>
           </TouchableOpacity>
         ))}
+        <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+          <Text style={styles.addButtonText}>Add Contact</Text>
+        </TouchableOpacity>
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add New Contact</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Name"
+              onChangeText={text => setNewContactName(text)}
+              value={newContactName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Phone Number"
+              keyboardType="phone-pad"
+              onChangeText={text => setNewContactNumber(text)}
+              value={newContactNumber}
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalButton} onPress={saveNewContact}>
+                <Text style={styles.modalButtonText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.navButton}>
@@ -180,5 +227,42 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.45,
     shadowRadius: 3.84,
-  }
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    height: 50
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 10
+  },
+  modalButton: {
+    marginLeft: 10,
+  },
+  modalButtonText: {
+    color: '#007BFF',
+    fontSize: 16,
+  },
 });
