@@ -228,6 +228,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.45,
     shadowRadius: 3.84,
   },
+  addButton:{
+    borderRadius: 20,
+    backgroundColor: '#0ABC71',
+    padding: 10,
+    alignItems: 'center', // Use alignItems instead of alignContent
+    justifyContent: 'center', // Center the text vertically
+  },
+  addButtonText: {
+    color: '#FFFFFF', // Text color set to white
+    fontWeight: 'bold', // Text bolded
+    textAlign: 'center', // Text centered horizontally
+    fontSize: 16
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
