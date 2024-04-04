@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import ImagePicker from 'react-native-image-picker';
 import ProfileImage from '../../assets/pfp.jpg';
 
 export default function ProfileScreen({navigation, userData}) {
-  const emergencyContacts = [
-    { name: 'John Doe', phoneNumber: '123-456-7890' },
-    { name: 'Jane Smith', phoneNumber: '987-654-3210' },
-  ];
-  
+  const formatPhoneNumber = (phoneNumber) => {
+    // Assuming phoneNumber format is '1234567890'
+    phoneNumber = String(phoneNumber);
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
+  };
   const [profilePic, setProfilePic] = useState(ProfileImage);
 
   const selectImage = () => {
@@ -42,12 +44,20 @@ export default function ProfileScreen({navigation, userData}) {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
+        <AntDesign style={styles.settingsIcon} name="setting" size={24} color="black" />
+      </TouchableOpacity>
       <View style={styles.profileContainer} onPress={selectImage}>
       <View style={styles.profileContainer}>
-        <Image
-          style={styles.profileImage}
-          source={profilePic}
-        />
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.profileImage}
+            source={profilePic}
+          />
+        </View>
+        <TouchableOpacity style={styles.editIconContainer} onPress={selectImage}>
+          <Octicons name="pencil" size={24} color="black" />
+        </TouchableOpacity>
         <Text style={styles.profileName}>{userData.Name}</Text>
         <Text style={styles.profileEmaiL}>{userData.Email}</Text>
       </View>
@@ -57,7 +67,7 @@ export default function ProfileScreen({navigation, userData}) {
         {Object.keys(userData.Contacts).map((contactId, index) => (
           <TouchableOpacity key={index} style={styles.contactContainer}>
             <Text style={styles.contactName}>{userData.Contacts[contactId].Name}</Text>
-            <Text style={styles.contactNumber}>{userData.Contacts[contactId].Number}</Text>
+            <Text style={styles.contactNumber}>{formatPhoneNumber(userData.Contacts[contactId].Number)}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -98,6 +108,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.45,
     shadowRadius: 3.84,
+    marginBottom: 15
   },
   profileImage: {
     width: 150,
@@ -107,7 +118,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   profileName: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   emergencyContainer: {
@@ -150,4 +161,24 @@ const styles = StyleSheet.create({
     right: 0,
     paddingVertical: 30,
   },
+  settingsIcon: {
+    marginTop: 30,
+    fontSize: 30,
+    left: 320
+  },
+  editIconContainer: {
+    position: 'absolute',
+    bottom: 75,
+    right: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.45,
+    shadowRadius: 3.84,
+  }
 });
