@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import ImagePicker from 'react-native-image-picker';
 import ProfileImage from '../../assets/pfp.jpg';
@@ -43,10 +45,15 @@ export default function ProfileScreen({navigation, userData}) {
       </TouchableOpacity>
       <View style={styles.profileContainer} onPress={selectImage}>
       <View style={styles.profileContainer}>
-        <Image
-          style={styles.profileImage}
-          source={profilePic}
-        />
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.profileImage}
+            source={profilePic}
+          />
+        </View>
+        <TouchableOpacity style={styles.editIconContainer} onPress={selectImage}>
+          <Octicons name="pencil" size={24} color="black" />
+        </TouchableOpacity>
         <Text style={styles.profileName}>{userData.Name}</Text>
         <Text style={styles.profileEmaiL}>{userData.Email}</Text>
       </View>
@@ -97,6 +104,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.45,
     shadowRadius: 3.84,
+    marginBottom: 15
   },
   profileImage: {
     width: 150,
@@ -153,5 +161,20 @@ const styles = StyleSheet.create({
     marginTop: 30,
     fontSize: 30,
     left: 320
+  },
+  editIconContainer: {
+    position: 'absolute',
+    bottom: 75,
+    right: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.45,
+    shadowRadius: 3.84,
   }
 });
