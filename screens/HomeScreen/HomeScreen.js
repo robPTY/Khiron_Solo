@@ -59,8 +59,12 @@ export default function HomePage({navigation}) {
           <TouchableOpacity style={[styles.button, styles.resetButton]} onPress={resetTimer}>
             <Text style={styles.buttonText}>Reset Timer</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={saveTimer}>
+          <TouchableOpacity style={[styles.button, styles.saveButton]}  onPress={() => {
+                  resetTimer();
+                  navigation.navigate('ActivityLogScreen', { timer: timer });
+                }}>
             <Text style={styles.buttonText}>Save Activity</Text>
+            
           </TouchableOpacity>
         </View>
       </View>

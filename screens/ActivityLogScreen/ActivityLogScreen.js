@@ -3,19 +3,22 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
-export default function ActivityLogs({ navigation }) {
+export default function ActivityLogs({ navigation, route }) {
   const [activityLogs, setActivityLogs] = useState([]);
 
-  // Example of retrieving saved timer information (replace with your actual logic)
   useEffect(() => {
-    // Assume saved timer information is retrieved from AsyncStorage or server
-    const savedActivityLogs = [
-      { id: 1, time: 120, date: '2024-03-28' },
-      { id: 2, time: 180, date: '2024-03-27' },
-      { id: 3, time: 90, date: '2024-03-26' },
-    ];
-    setActivityLogs(savedActivityLogs);
-  }, []);
+    if (route.params && route.params.timer !== undefined) {
+      const { timer } = route.params;
+      saveActivityLog(timer);
+    }
+  }, [route.params]);
+
+  const saveActivityLog = (time) => {
+    // Save the activity log using your preferred method
+    const date = new Date().toISOString().split('T')[0];
+    const log = { id: activityLogs.length + 1, time, date };
+    setActivityLogs([log, ...activityLogs]);
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.logItem}>
