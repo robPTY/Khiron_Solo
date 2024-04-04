@@ -7,8 +7,9 @@ import {useState, useEffect} from 'react'
 import ProfileScreen from './screens/ProfileScreen/ProfileScreen';
 import LoginScreen from './screens/LoginScreen/Login';
 import SignUpScreen from './screens/SignUpScreen/SignUpScreen';
-import HomeScreen from './screens/HomeScreen/HomeScreen'
 import { getDatabase, ref, get, child, onValue } from "firebase/database";
+import HomeScreen from './screens/HomeScreen/HomeScreen';
+import ActivityLogScreen from './screens/ActivityLogScreen/ActivityLogScreen';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 import { FIREBASE_APP } from './FirebaseConfig';
 
@@ -95,7 +96,7 @@ export default function App() {
         <Stack.Screen name="ProfileScreen"  options={{ headerShown: false }} >
           {(props) => <ProfileScreen {...props} userData={userData} />}
         </Stack.Screen>
-        
+        <Stack.Screen name="ActivityLogScreen" component={ActivityLogScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
       </Stack.Navigator>
     </NavigationContainer>
 

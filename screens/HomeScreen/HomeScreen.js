@@ -15,11 +15,22 @@ export default function HomePage({navigation}) {
     }, 1000);
   };
 
-  const buttonColor = timerRunning ? 'red' : '#0ABC71';
-
   const stopTimer = () => {
     setTimerRunning(false);
     clearInterval(intervalRef.current);
+  };
+
+  const resetTimer = () => {
+    setTimer(0);
+    clearInterval(intervalRef.current);
+    setTimerRunning(false);
+  };
+
+  const saveTimer = () => {
+    // Here you can implement the logic to save timer information
+    // For example, you can save it to AsyncStorage or send it to a server
+    // This is just a placeholder function
+    console.log("Timer information saved:", timer);
   };
 
   const formatTime = (timeInSeconds) => {
@@ -27,6 +38,8 @@ export default function HomePage({navigation}) {
     const seconds = timeInSeconds % 60;
     return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
   };
+
+  const buttonColor = timerRunning ? 'red' : '#0ABC71';
 
   return (
     <View style={styles.container}>
@@ -37,24 +50,32 @@ export default function HomePage({navigation}) {
         <View style={styles.timerBox}>
           <Text style={styles.timerText}>{formatTime(timer)}</Text>
         </View>
-        <TouchableOpacity style={[styles.startButton, { backgroundColor: buttonColor }]}  onPress={timerRunning ? stopTimer : startTimer}>
-          <Text style={[styles.buttonText, styles.startButtonText]}>
-            {timerRunning ? 'Stop Activity' : 'Start Activity'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: buttonColor }]} onPress={timerRunning ? stopTimer : startTimer}>
+            <Text style={styles.buttonText}>
+              {timerRunning ? 'Stop Activity' : 'Start Activity'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, styles.resetButton]} onPress={resetTimer}>
+            <Text style={styles.buttonText}>Reset Timer</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={saveTimer}>
+            <Text style={styles.buttonText}>Save Activity</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={[styles.section, styles.section3]}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.navButton}>
+          <TouchableOpacity style={styles.navButton}  onPress={() => navigation.navigate('ActivityLogScreen')}>
             <Text style={styles.buttonText}>
-              <Feather name="home" size={40} color="white" />
+              <Feather name="activity" size={40} color="white" />
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.navButton}>
-            <Feather name="activity" size={40} color="white" />
+          <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Inside')}>
+            <Feather name="home" size={40} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.navButton}>
-            <AntDesign name="user" size={40} color="white" onPress={() => navigation.navigate('ProfileScreen')} />
+          <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('ProfileScreen')}>
+            <AntDesign name="user" size={40} color="white" />
           </TouchableOpacity>
         </View>
       </View>
@@ -100,6 +121,7 @@ const styles = StyleSheet.create({
     width: 325,
     height: 150,
     backgroundColor: '#ffffff',
+    marginTop: 250,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -108,15 +130,22 @@ const styles = StyleSheet.create({
     fontSize: 64,
     fontWeight: 'bold',
   },
-  startButton: {
+  buttonsContainer: {
+    alignItems: 'center',
+  },
+  button: {
     marginTop: 20,
-    marginBottom: -250,
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 10,
   },
-  startButtonText: {
-    fontSize: 25,
+  resetButton: {
+    backgroundColor: '#606A69',
+    marginTop: 10,
+  },
+  saveButton: {
+    backgroundColor: '#4287f5', // Change color according to your design
+    marginTop: 10,
   },
   buttonText: {
     color: '#ffffff',
