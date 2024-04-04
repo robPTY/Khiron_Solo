@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { FIREBASE_APP } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { getDatabase, ref, set, push } from "firebase/database";
+import { getDatabase, ref, set, push, onValue } from "firebase/database";
 //import Login from '../LoginScreen/Login';
 
 const db = getDatabase(FIREBASE_APP);
@@ -22,17 +22,31 @@ const SignUpScreen = ({ navigation }) => {
 
     const userData = {
         Email: email,
-        Name: name
+        Name: name,
+        Contacts:{},
+        Past_Rides:{}
     }
 
     const signUp = async () =>{
         setLoading(true);
-        const usersRef = ref(db, 'Users');
+        const usersRef = ref(db, 'Users/-NtY75dPoMyCVXPD2ISa');
         try{
             const response = await createUserWithEmailAndPassword(auth, email, password);
-            const newUserRef = push(usersRef);
-            await set(newUserRef, userData);
-            setUserId(newUserRef.key);
+            const newUser = response.user; // Get the user object from UserCredential
+            //setUserId(response.user.uid);
+            //console.log(response.user.uid);
+            // const newUserRef = ref(usersRef, newUser.uid); // Create a reference using the UID
+            // await set(newUserRef, userData); // Set user data at the UID
+            set(ref(db, 'Users/' + newUser.uid), userData);
+            //Don't delete this part. It makes it work for some reason
+            onValue(usersRef, (snapshot) => {
+            const data = snapshot.val();
+            console.log(data.Email);
+            });
+            // const newUserRef = push(usersRef);
+            // await set(newUserRef, userData);
+            // setUserId(response.user.uid);
+            //setUserId(newUserRef.key);
         } catch (error){
             console.log(error);
             alert('Sign in  failed: ' + error.message);

@@ -5,7 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import ImagePicker from 'react-native-image-picker';
 import ProfileImage from '../../assets/pfp.jpg';
 
-export default function ProfileScreen({navigation}) {
+export default function ProfileScreen({navigation, userData}) {
   const emergencyContacts = [
     { name: 'John Doe', phoneNumber: '123-456-7890' },
     { name: 'Jane Smith', phoneNumber: '987-654-3210' },
@@ -43,21 +43,21 @@ export default function ProfileScreen({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer} onPress={selectImage}>
-      <View style={styles.imageContainer}>
-          <Image
-            style={styles.profileImage}
-            source={profilePic}
-          />
-        </View>
-        <Text style={styles.profileName}>ANNA CAMPBELL</Text>
-        <Text style={styles.profileEmail}>asimpson@jbu.edu</Text>
+      <View style={styles.profileContainer}>
+        <Image
+          style={styles.profileImage}
+          source={profilePic}
+        />
+        <Text style={styles.profileName}>{userData.Name}</Text>
+        <Text style={styles.profileEmaiL}>{userData.Email}</Text>
+      </View>
       </View>
       <View style={styles.emergencyContainer}>
         <Text style={styles.emergencyTitle}>Emergency Contacts</Text>
-        {emergencyContacts.map((contact, index) => (
+        {Object.keys(userData.Contacts).map((contactId, index) => (
           <TouchableOpacity key={index} style={styles.contactContainer}>
-            <Text style={styles.contactName}>{contact.name}</Text>
-            <Text style={styles.contactNumber}>{contact.phoneNumber}</Text>
+            <Text style={styles.contactName}>{userData.Contacts[contactId].Name}</Text>
+            <Text style={styles.contactNumber}>{userData.Contacts[contactId].Number}</Text>
           </TouchableOpacity>
         ))}
       </View>
