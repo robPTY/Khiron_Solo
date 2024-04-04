@@ -6,10 +6,12 @@ import { User, onAuthStateChanged } from 'firebase/auth'
 import {useState, useEffect} from 'react'
 import ProfileScreen from './screens/ProfileScreen/ProfileScreen';
 import LoginScreen from './screens/LoginScreen/Login';
+import SettingScreen from './screens/SettingScreen/SettingScreen';
 import SignUpScreen from './screens/SignUpScreen/SignUpScreen';
 import { getDatabase, ref, get, child, onValue } from "firebase/database";
 import HomeScreen from './screens/HomeScreen/HomeScreen';
 import ActivityLogScreen from './screens/ActivityLogScreen/ActivityLogScreen';
+import LoadingScreen from './screens/LoadingScreen/LoadingScreen';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 import { FIREBASE_APP } from './FirebaseConfig';
 
@@ -45,21 +47,29 @@ export default function App() {
   const [userData, setUserData] = useState();
   const [userId, setUserId] = useState('');
   const [user, setUser] = useState(null);
- // const [user, setUser] = useState<User>({});
-  
-  
+  const [loadingScreen, setLoadingScreen] = useState(false);
 
   useEffect (() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
+      console.log(user.email);
+      setLoadingScreen(true);
       setUserId(user.uid);
     });
+
+    if (loadingScreen) {
+      setTimeout(() => {
+        setLoadingScreen(false);
+      }, 3000);
+      return <LoadingScreen />;
+    }
+
+    return unsubscribe;
   }, []);
 
   useEffect(() => {
     if (userId){
       //console.log(userId);
-  
       const dbRef = ref(db);
       const usersRef = ref(db, 'Users/' + userId);
   
@@ -81,7 +91,6 @@ export default function App() {
     } 
   }, [userId]);
   
-  
   //component={ProfileScreen}
 
   return (
@@ -97,6 +106,7 @@ export default function App() {
           {(props) => <ProfileScreen {...props} userData={userData} />}
         </Stack.Screen>
         <Stack.Screen name="ActivityLogScreen" component={ActivityLogScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
+        <Stack.Screen name="SettingScreen" component={SettingScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
 
