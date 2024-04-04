@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { User, onAuthStateChanged } from 'firebase/auth'
@@ -9,14 +8,20 @@ import ProfileScreen from './screens/ProfileScreen/ProfileScreen';
 import LoginScreen from './screens/LoginScreen/Login';
 import SignUpScreen from './screens/SignUpScreen/SignUpScreen';
 import HomeScreen from './screens/HomeScreen/HomeScreen'
+import { getDatabase, ref, get, child, onValue } from "firebase/database";
 import { FIREBASE_AUTH } from './FirebaseConfig';
+import { FIREBASE_APP } from './FirebaseConfig';
 
+
+const db = getDatabase(FIREBASE_APP);
 
 const Stack = createNativeStackNavigator();
 
 const InsideStack = createNativeStackNavigator();
 
 const LogInStack = createNativeStackNavigator();
+
+
 
 function InsideLayout(){
   return (
@@ -36,15 +41,47 @@ function LoginLayout(){
 }
 
 export default function App() {
+  const [userData, setUserData] = useState();
+  const [userId, setUserId] = useState('');
   const [user, setUser] = useState(null);
  // const [user, setUser] = useState<User>({});
-
+  
+  
 
   useEffect (() => {
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
+      setUserId(user.uid);
     });
   }, []);
+
+  useEffect(() => {
+    if (userId){
+      //console.log(userId);
+  
+      const dbRef = ref(db);
+      const usersRef = ref(db, 'Users/' + userId);
+  
+      get(child(dbRef, 'Users/' + userId)).then((snapshot) => {
+        if (snapshot.exists()) {
+          setUserData(snapshot.val());
+          
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+      // onValue(usersRef, (snapshot) => {
+      //   setUserData(snapshot.val());
+      //   console.log(userData.Email);
+      // });
+      //console.log(userData);
+    } 
+  }, [userId]);
+  
+  
+  //component={ProfileScreen}
 
   return (
     
@@ -55,7 +92,10 @@ export default function App() {
         ) : (
           <Stack.Screen name='Login' component={LoginLayout} options={{headerShown: false}}/>
         )}
-        <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="ProfileScreen"  options={{ headerShown: false }} >
+          {(props) => <ProfileScreen {...props} userData={userData} />}
+        </Stack.Screen>
+        
       </Stack.Navigator>
     </NavigationContainer>
 
@@ -70,3 +110,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
