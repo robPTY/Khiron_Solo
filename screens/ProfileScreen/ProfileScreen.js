@@ -6,10 +6,6 @@ import ImagePicker from 'react-native-image-picker';
 import ProfileImage from '../../assets/pfp.jpg';
 
 export default function ProfileScreen({navigation, userData}) {
-  const emergencyContacts = [
-    { name: 'John Doe', phoneNumber: '123-456-7890' },
-    { name: 'Jane Smith', phoneNumber: '987-654-3210' },
-  ];
   
   const [profilePic, setProfilePic] = useState(ProfileImage);
 
@@ -42,6 +38,9 @@ export default function ProfileScreen({navigation, userData}) {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
+        <AntDesign style={styles.settingsIcon} name="setting" size={24} color="black" />
+      </TouchableOpacity>
       <View style={styles.profileContainer} onPress={selectImage}>
       <View style={styles.profileContainer}>
         <Image
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   profileName: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   emergencyContainer: {
@@ -150,4 +149,9 @@ const styles = StyleSheet.create({
     right: 0,
     paddingVertical: 30,
   },
+  settingsIcon: {
+    marginTop: 30,
+    fontSize: 30,
+    left: 320
+  }
 });
