@@ -8,7 +8,11 @@ import ImagePicker from 'react-native-image-picker';
 import ProfileImage from '../../assets/pfp.jpg';
 
 export default function ProfileScreen({navigation, userData}) {
-  
+  const formatPhoneNumber = (phoneNumber) => {
+    // Assuming phoneNumber format is '1234567890'
+    phoneNumber = String(phoneNumber);
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
+  };
   const [profilePic, setProfilePic] = useState(ProfileImage);
 
   const selectImage = () => {
@@ -63,7 +67,7 @@ export default function ProfileScreen({navigation, userData}) {
         {Object.keys(userData.Contacts).map((contactId, index) => (
           <TouchableOpacity key={index} style={styles.contactContainer}>
             <Text style={styles.contactName}>{userData.Contacts[contactId].Name}</Text>
-            <Text style={styles.contactNumber}>{userData.Contacts[contactId].Number}</Text>
+            <Text style={styles.contactNumber}>{formatPhoneNumber(userData.Contacts[contactId].Number)}</Text>
           </TouchableOpacity>
         ))}
       </View>
