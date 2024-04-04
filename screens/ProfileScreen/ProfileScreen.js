@@ -3,11 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
-export default function ProfileScreen({navigation}) {
-  const emergencyContacts = [
-    { name: 'John Doe', phoneNumber: '123-456-7890' },
-    { name: 'Jane Smith', phoneNumber: '987-654-3210' },
-  ];
+export default function ProfileScreen({navigation, userData}) {
 
   return (
     <View style={styles.container}>
@@ -15,14 +11,14 @@ export default function ProfileScreen({navigation}) {
         <Image
           style={styles.profileImage}
         />
-        <Text style={styles.profileName}>Your Name</Text>
+        <Text style={styles.profileName}>{userData.Name}</Text>
       </View>
       <View style={styles.emergencyContainer}>
         <Text style={styles.emergencyTitle}>Emergency Contacts</Text>
-        {emergencyContacts.map((contact, index) => (
+        {Object.keys(userData.Contacts).map((contactId, index) => (
           <TouchableOpacity key={index} style={styles.contactContainer}>
-            <Text style={styles.contactName}>{contact.name}</Text>
-            <Text style={styles.contactNumber}>{contact.phoneNumber}</Text>
+            <Text style={styles.contactName}>{userData.Contacts[contactId].Name}</Text>
+            <Text style={styles.contactNumber}>{userData.Contacts[contactId].Number}</Text>
           </TouchableOpacity>
         ))}
       </View>
