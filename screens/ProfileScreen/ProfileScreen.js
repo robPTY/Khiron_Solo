@@ -1,17 +1,56 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import ImagePicker from 'react-native-image-picker';
+import ProfileImage from '../../assets/pfp.jpg';
 
 export default function ProfileScreen({navigation, userData}) {
+  const emergencyContacts = [
+    { name: 'John Doe', phoneNumber: '123-456-7890' },
+    { name: 'Jane Smith', phoneNumber: '987-654-3210' },
+  ];
+  
+  const [profilePic, setProfilePic] = useState(ProfileImage);
+
+  const selectImage = () => {
+    const options = {
+      title: 'Select Profile Picture',
+      cancelButtonTitle: 'Cancel',
+      takePhotoButtonTitle: 'Take Photo',
+      chooseFromLibraryButtonTitle: 'Choose from Library',
+      quality: 0.5,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = { uri: response.uri };
+        setProfilePic(source);
+      }
+    });
+  };
 
   return (
     <View style={styles.container}>
+      <View style={styles.profileContainer} onPress={selectImage}>
       <View style={styles.profileContainer}>
         <Image
           style={styles.profileImage}
+          source={profilePic}
         />
         <Text style={styles.profileName}>{userData.Name}</Text>
+        <Text style={styles.profileEmaiL}>{userData.Email}</Text>
+      </View>
       </View>
       <View style={styles.emergencyContainer}>
         <Text style={styles.emergencyTitle}>Emergency Contacts</Text>
@@ -47,11 +86,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  profileEmail:{
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  imageContainer:{
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.45,
+    shadowRadius: 3.84,
+  },
   profileImage: {
     width: 150,
     height: 150,
     borderRadius: 75,
     marginBottom: 10,
+    marginTop: 50,
   },
   profileName: {
     fontSize: 20,

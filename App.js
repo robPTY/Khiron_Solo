@@ -10,6 +10,7 @@ import SignUpScreen from './screens/SignUpScreen/SignUpScreen';
 import { getDatabase, ref, get, child, onValue } from "firebase/database";
 import HomeScreen from './screens/HomeScreen/HomeScreen';
 import ActivityLogScreen from './screens/ActivityLogScreen/ActivityLogScreen';
+import LoadingScreen from './screens/LoadingScreen/LoadingScreen';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 import { FIREBASE_APP } from './FirebaseConfig';
 
@@ -45,17 +46,25 @@ export default function App() {
   const [userData, setUserData] = useState();
   const [userId, setUserId] = useState('');
   const [user, setUser] = useState(null);
- // const [user, setUser] = useState<User>({});
-  
-  
+  const [loading, setLoading] = useState(false);
+  const [loadingScreen, setLoadingScreen] = useState(false);
 
   useEffect (() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
+      console.log(user.email);
+      setLoadingScreen(true);
       setUserId(user.uid);
     });
+    return unsubscribe;
   }, []);
 
+  if (loadingScreen) {
+    setTimeout(() => {
+      setLoadingScreen(false);
+    }, 3000);
+    return <LoadingScreen />;
+  }
   useEffect(() => {
     if (userId){
       //console.log(userId);
@@ -80,7 +89,6 @@ export default function App() {
       //console.log(userData);
     } 
   }, [userId]);
-  
   
   //component={ProfileScreen}
 
