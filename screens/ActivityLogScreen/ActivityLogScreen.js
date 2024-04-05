@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { getDatabase, ref, set, push, onValue } from "firebase/database";
+import { FIREBASE_APP } from '../../FirebaseConfig';
 
 export default function ActivityLogs({ navigation, route }) {
   const [activityLogs, setActivityLogs] = useState([]);
+
+  const db = getDatabase(FIREBASE_APP);
+  const userId ='qZuIFrRweSTWbPHtYZwDFeR2KtF2';
+  const location ='';
 
   useEffect(() => {
     if (route.params && route.params.timer !== undefined) {
@@ -18,6 +24,12 @@ export default function ActivityLogs({ navigation, route }) {
     const date = new Date().toISOString().split('T')[0];
     const log = { id: activityLogs.length + 1, time, date };
     setActivityLogs([log, ...activityLogs]);
+    set(ref(db, 'Users/' + userId+'/Past_Rides/Ride2'), {
+      Time: time,
+      Date: date,
+      Location: location
+    });
+    console.log(activityLogs);
   };
 
   const renderItem = ({ item }) => (
