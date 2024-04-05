@@ -1,13 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, Button} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import ImagePicker from 'react-native-image-picker';
+import { getDatabase, ref, set, get, child, push, onValue } from "firebase/database";
 import ProfileImage from '../../assets/pfp.jpg';
+import { FIREBASE_APP } from '../../FirebaseConfig';
 
-export default function ProfileScreen({navigation, userData}) {
+export default function ProfileScreen({navigation, userId}) {
+  const db = getDatabase(FIREBASE_APP);
   const formatPhoneNumber = (phoneNumber) => {
     // Assuming phoneNumber format is '1234567890'
     phoneNumber = String(phoneNumber);
@@ -17,6 +20,29 @@ export default function ProfileScreen({navigation, userData}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [newContactName, setNewContactName] = useState('');
   const [newContactNumber, setNewContactNumber] = useState('');
+  const [userData, setUserData] = useState();
+
+  useEffect(() => {
+     //console.log(userId);
+     const dbRef = ref(db);
+     //const usersRef = ref(db, 'Users/' + userId);
+ 
+     get(child(dbRef, 'Users/' + userId)).then((snapshot) => {
+       if (snapshot.exists()) {
+         setUserData(snapshot.val());
+         
+       } else {
+         console.log("No data available");
+       }
+     }).catch((error) => {
+       console.error(error);
+     });
+  }, [userId]);
+  
+  
+  //console.log(userDat);
+  
+  
 
   const selectImage = () => {
     const options = {
@@ -46,7 +72,11 @@ export default function ProfileScreen({navigation, userData}) {
   };
 
   const saveNewContact = () => {
-    // Save new contact logic
+    const contactIds = userData ? Object.keys(userData.Contacts) :[];
+    set(ref(db, 'Users/' + userId+'/Contacts/Contact'+(contactIds.length + 1).toString()), {
+      Name: newContactName,
+      Number: newContactNumber
+    });
     setModalVisible(false);
     // Clear input fields
     setNewContactName('');
@@ -55,69 +85,66 @@ export default function ProfileScreen({navigation, userData}) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
-        <AntDesign style={styles.settingsIcon} name="setting" size={24} color="black" />
-      </TouchableOpacity>
-      <View style={styles.profileContainer} onPress={selectImage}>
-      <View style={styles.profileContainer}>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.profileImage}
-            source={profilePic}
-          />
-        </View>
-        <TouchableOpacity style={styles.editIconContainer} onPress={selectImage}>
-          <Octicons name="pencil" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.profileName}>{userData.Name}</Text>
-        <Text style={styles.profileEmaiL}>{userData.Email}</Text>
-      </View>
-      </View>
-      <View style={styles.emergencyContainer}>
-        <Text style={styles.emergencyTitle}>Emergency Contacts</Text>
-        {Object.keys(userData.Contacts).map((contactId, index) => (
-          <TouchableOpacity key={index} style={styles.contactContainer}>
-            <Text style={styles.contactName}>{userData.Contacts[contactId].Name}</Text>
-            <Text style={styles.contactNumber}>{formatPhoneNumber(userData.Contacts[contactId].Number)}</Text>
-          </TouchableOpacity>
-        ))}
-        <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.addButtonText}>Add Contact</Text>
-        </TouchableOpacity>
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add New Contact</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Name"
-              onChangeText={text => setNewContactName(text)}
-              value={newContactName}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Phone Number"
-              keyboardType="phone-pad"
-              onChangeText={text => setNewContactNumber(text)}
-              value={newContactNumber}
-            />
-            <View style={styles.modalButtons}>
-              <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
-                <Text style={styles.modalButtonText}>Cancel</Text>
+      {userData && (
+      <><TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
+          <AntDesign style={styles.settingsIcon} name="setting" size={24} color="black" />
+        </TouchableOpacity><View style={styles.profileContainer} onPress={selectImage}>
+            <View style={styles.profileContainer}>
+              <View style={styles.imageContainer}>
+                <Image
+                  style={styles.profileImage}
+                  source={profilePic} />
+              </View>
+              <TouchableOpacity style={styles.editIconContainer} onPress={selectImage}>
+                <Octicons name="pencil" size={24} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.modalButton} onPress={saveNewContact}>
-                <Text style={styles.modalButtonText}>Confirm</Text>
-              </TouchableOpacity>
+              <Text style={styles.profileName}>{userData.Name}</Text>
+              <Text style={styles.profileEmaiL}>{userData.Email}</Text>
             </View>
-          </View>
-        </View>
-      </Modal>
-      </View>
+          </View><View style={styles.emergencyContainer}>
+            <Text style={styles.emergencyTitle}>Emergency Contacts</Text>
+            {userData && userData.Contacts && Object.keys(userData.Contacts).map((contactId, index) => (
+              <TouchableOpacity key={index} style={styles.contactContainer}>
+                <Text style={styles.contactName}>{userData.Contacts[contactId].Name}</Text>
+                <Text style={styles.contactNumber}>{formatPhoneNumber(userData.Contacts[contactId].Number)}</Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+              <Text style={styles.addButtonText}>Add Contact</Text>
+            </TouchableOpacity>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>Add New Contact</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Name"
+                    onChangeText={text => setNewContactName(text)}
+                    value={newContactName} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Phone Number"
+                    keyboardType="phone-pad"
+                    onChangeText={text => setNewContactNumber(text)}
+                    value={newContactNumber} />
+                  <View style={styles.modalButtons}>
+                    <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                      <Text style={styles.modalButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.modalButton} onPress={saveNewContact}>
+                      <Text style={styles.modalButtonText}>Confirm</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View></>
+      )}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.navButton}>
           <Feather name="activity" size={40} color="white" onPress={() => navigation.navigate('ActivityLogScreen')}/>
