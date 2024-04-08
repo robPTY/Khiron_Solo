@@ -22,9 +22,7 @@ const SignUpScreen = ({ navigation }) => {
 
     const userData = {
         Email: email,
-        Name: name,
-        Contacts:{},
-        Past_Rides:{}
+        Name: name
     }
 
     const signUp = async () =>{
@@ -33,20 +31,14 @@ const SignUpScreen = ({ navigation }) => {
         try{
             const response = await createUserWithEmailAndPassword(auth, email, password);
             const newUser = response.user; // Get the user object from UserCredential
-            //setUserId(response.user.uid);
-            //console.log(response.user.uid);
-            // const newUserRef = ref(usersRef, newUser.uid); // Create a reference using the UID
-            // await set(newUserRef, userData); // Set user data at the UID
             set(ref(db, 'Users/' + newUser.uid), userData);
+
             //Don't delete this part. It makes it work for some reason
             onValue(usersRef, (snapshot) => {
             const data = snapshot.val();
             console.log(data.Email);
             });
-            // const newUserRef = push(usersRef);
-            // await set(newUserRef, userData);
-            // setUserId(response.user.uid);
-            //setUserId(newUserRef.key);
+            
         } catch (error){
             console.log(error);
             alert('Sign in  failed: ' + error.message);
