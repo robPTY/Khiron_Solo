@@ -103,12 +103,9 @@ export default function App() {
           <Stack.Screen name='Login' component={LoginLayout} options={{headerShown: false}}/>
         )}
         <Stack.Screen name="ProfileScreen"  options={{ headerShown: false }} >
-          {(props) => <ProfileScreen {...props} userData={userData} />}
+          {(props) => <ProfileScreen {...props} userData={userData} userId ={userId}/>}
         </Stack.Screen>
-        <Stack.Screen name="ActivityLogScreen" options={{ headerShown: false, animation: 'slide_from_left' }}>
-          {(props) => <ActivityLogScreen {...props} userData={userData} />}
-        </Stack.Screen>
-
+        <Stack.Screen name="ActivityLogScreen" component={ActivityLogScreen} options={{ headerShown: false, animation: 'slide_from_left' }} />
         <Stack.Screen name="SettingScreen" component={SettingScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
