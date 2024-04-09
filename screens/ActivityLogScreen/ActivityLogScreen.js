@@ -5,7 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FIREBASE_APP } from '../../FirebaseConfig';
 
-export default function ActivityLogs({ navigation, route }) {
+export default function ActivityLogs({ navigation, route, userData }) {
   const [activityLogs, setActivityLogs] = useState([]);
 
   const db = getDatabase(FIREBASE_APP);
