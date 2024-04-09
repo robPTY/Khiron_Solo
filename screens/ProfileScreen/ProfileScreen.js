@@ -42,7 +42,6 @@ export default function ProfileScreen({navigation, userId}) {
   
   //console.log(userDat);
   
-  
 
   const selectImage = () => {
     const options = {
